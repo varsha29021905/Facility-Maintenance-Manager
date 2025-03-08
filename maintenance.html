@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Maintenance{% endblock %}
+
+{% block content %}
+<h1>Schedule Maintenance</h1>
+<form action="{{ url_for('schedule_maintenance') }}" method="post">
+    <select name="facility_id" required>
+        <option value="" disabled selected>Select a facility</option>
+        {% for facility in facilities %}
+            <option value="{{ facility.id }}">{{ facility.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" name="appliance" placeholder="Enter the appliance for maintenance" required>
+
+    <input type="text" name="issue" placeholder="Enter the issue description" required>
+
+    <input type="date" name="date" required min="{{ today }}">
+    <button type="submit">Schedule</button>
+</form>
+
+<h2>Scheduled Maintenance</h2>
+<table>
+    <tr>
+        <th>Facility</th>
+        <th>Issue</th>
+        <th>Appliance</th>
+        <th>Date</th>
+        <th>Status</th>
+    </tr>
+    {% for entry in maintenance %}
+    <tr>
+        <td>{{ entry['name'] }}</td>
+        <td>{{ entry['issue'] if entry['issue'] else 'No Issue' }}</td>
+        <td>{{ entry['appliance'] }}</td>  <!-- Display appliance -->
+        <td>{{ entry['date'] }}</td>
+        <td>{{ entry['status'] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
