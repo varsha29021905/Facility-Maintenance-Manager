@@ -1,0 +1,13 @@
+{% if session.get('user_id') %}
+    <p>Welcome, {{ session.get('username') }}!</p>
+{% else %}
+    <p>Please <a href="{{ url_for('login') }}">log in</a> to continue.</p>
+{% endif %}
+{% extends "base.html" %}
+
+{% block title %}Home - Facility Management{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Facility Maintenance Manager</h1>
+<p>Use the navigation bar to manage facilities, maintenance, and issues.</p>
+{% endblock %}
