@@ -1,0 +1,24 @@
+{% if session.get('user_id') %}
+    <p>Welcome, {{ session.get('username') }}!</p>
+{% else %}
+    <p>Please <a href="{{ url_for('login') }}">log in</a> to continue.</p>
+{% endif %}
+{% extends "base.html" %}
+
+{% block title %}Facilities{% endblock %}
+
+{% block content %}
+<h1>Facilities</h1>
+<form action="{{ url_for('add_facility') }}" method="post">
+    Name: <input type="text" name="name" required>
+    <button type="submit">Add Facility</button>
+</form>
+
+<ul>
+    {% for facility in facilities %}
+        <li>{{ facility.name }}
+            <a href="{{ url_for('delete_facility', facility_id=facility.id) }}">Delete</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
