@@ -1,0 +1,53 @@
+{% if session.get('user_id') %}
+    <p>Welcome, {{ session.get('username') }}!</p>
+{% else %}
+    <p>Please <a href="{{ url_for('login') }}">log in</a> to continue.</p>
+{% endif %}
+{% extends "base.html" %}
+
+{% block title %}Issues{% endblock %}
+
+{% block content %}
+<h1>Report an Issue</h1>
+<form action="{{ url_for('report_issue') }}" method="post">
+    <label for="facility_id">Select Facility:</label>
+    <select name="facility_id" id="facility_id" required>
+        <option value="" disabled selected>Select a facility</option>
+        {% for facility in facilities %}
+            <option value="{{ facility.id }}">{{ facility.name }}</option>
+        {% endfor %}
+    </select>
+    
+    <label for="issue">Issue Description:</label>
+    <input type="text" name="issue" id="issue" required placeholder="Describe the issue">
+    
+    <button type="submit">Report Issue</button>
+</form>
+
+<h2>Reported Issues</h2>
+<table border="1">
+    <tr>
+        <th>Facility</th>
+        <th>Issue</th>
+        <th>Status</th>
+        <th>Update</th>
+    </tr>
+    {% for i in issues %}
+    <tr>
+        <td>{{ i.name }}</td>
+        <td>{{ i.issue }}</td>
+        <td>{{ i.status }}</td>
+        <td>
+            <form action="{{ url_for('update_issue', issue_id=i.id) }}" method="post">
+                <select name="status">
+                    <option value="Reported" {% if i.status == 'Reported' %}selected{% endif %}>Reported</option>
+                    <option value="Pending" {% if i.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Resolved" {% if i.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                </select>
+                <button type="submit">Update</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
